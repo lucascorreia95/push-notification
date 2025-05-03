@@ -6,3 +6,23 @@ services:
       POSTGRES_DB: push-notification
     ports:
       - 5432:5432
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    ports:
+      - '5672:5672' # Porta padrão do RabbitMQ para comunicação AMQP
+      - '15672:15672' # Porta da interface de gerenciamento web do RabbitMQ
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - mynetwork
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  mynetwork:
+    driver: bridge
