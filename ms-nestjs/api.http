@@ -1,0 +1,25 @@
+### Create user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "email": "dev@test.com",
+  "password": "dev123"
+}
+
+### Find All users
+GET http://localhost:3000/users
+
+### Login
+# @name Login
+POST http://localhost:3000/auth
+Content-Type: application/json
+
+{
+  "email": "dev@test.com",
+  "password": "dev123"
+}
+
+###
+
+@token = {{ Login.response.body.access_token }}
