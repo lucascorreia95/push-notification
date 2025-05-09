@@ -7,20 +7,20 @@ import { ConfigModule } from '@nestjs/config';
 import { QueueConsumerModule } from './queue-consumer/queue-consumer.module';
 import { RabbitMqModule } from './rabbit-mq/rabbit-mq.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { QueueManagementModule } from './queue-management/queue-management.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    UsersModule,
-    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
+    PrismaModule,
+    AuthModule,
     QueueConsumerModule,
     RabbitMqModule,
     EventEmitterModule.forRoot(),
-    QueueManagementModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

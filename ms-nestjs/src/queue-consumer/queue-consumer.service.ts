@@ -1,50 +1,30 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { DiscoveryService } from '@nestjs/core';
-import { OnEvent } from '@nestjs/event-emitter';
-import { QueueConsumerInterface } from './interface/queue-consumer.interface';
+import { ConfigService } from '@nestjs/config';
 import { RabbitMqService } from 'src/rabbit-mq/rabbit-mq.service';
 
 @Injectable()
 export class QueueConsumerService implements OnModuleInit {
   constructor(
-    private readonly discoveryService: DiscoveryService,
     private readonly rabbitmqService: RabbitMqService,
+    private readonly configService: ConfigService,
   ) {}
 
-  private consumers: Map<string, QueueConsumerInterface> = new Map();
-
-  onModuleInit() {
-    const providers = this.discoveryService.getProviders();
-    for (const provider of providers) {
-      const instance = provider.instance;
-      if (
-        instance &&
-        typeof instance.handleMessage === 'function' &&
-        typeof instance.getQueueName === 'function'
-      ) {
-        const consumer = instance as QueueConsumerInterface;
-        this.rabbitmqService.consume(
-          consumer.getQueueName(),
-          consumer.handleMessage.bind(consumer),
-        );
-        console.log(
-          `Consumer registered for queue: ${consumer.getQueueName()}`,
-        );
-      }
-    }
+  private handleQueueMsg(event) {
+    console.log('*************************');
+    console.log('handler queue msg ', event);
   }
 
-  @OnEvent('queue.created')
-  handleQueueCreatedEvent({ queueName }: { queueName: string }) {
+  async onModuleInit() {
     try {
-      this.rabbitmqService.consume(queueName, () =>
-        console.log('handler for ', queueName),
+      const queueName = this.configService.get<string>('QUEUE_NAME');
+
+      this.rabbitmqService.consume(queueName!, (event) =>
+        this.handleQueueMsg(event),
       );
-      console.log(
-        `Consumer started for dynamically created queue: ${queueName}`,
-      );
+
+      console.log(`Consumer started for queue: ${queueName}`);
     } catch (err) {
-      console.warn(`Error to start the consumer queue: ${queueName}`);
+      console.warn(`Error to start the consumer queue: ${err}`);
     }
   }
 }
