@@ -8,11 +8,11 @@ export default function Home() {
   const [status, setStatus] = useState("");
   const router = useRouter();
 
-  async function register() {
+  async function login() {
     if (!inputNameValue || !inputPasswordValue) return;
 
     try {
-      const response = await fetch("http://localhost:4000/users", {
+      const response = await fetch("http://localhost:4000/auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,14 +24,18 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        setStatus("Erro ao efetuar o cadastro!");
-        throw new Error("error when registering");
+        setStatus("Erro ao efetuar o Login!");
+        throw new Error("error when login");
       }
 
-      setStatus("Cadastro efetuado com sucesso!");
-      router.push("/login");
+      setStatus("Login efetuado com sucesso!");
+
+      const { access_token } = await response.json();
+      router.push(
+        `/notifications?token=${access_token}&user=${inputNameValue}`
+      );
     } catch (error) {
-      setStatus("Erro ao efetuar o cadastro!");
+      setStatus("Erro ao efetuar o Login");
       console.log(error);
     }
   }
@@ -39,9 +43,9 @@ export default function Home() {
   return (
     <>
       <div className="flex flex-col items-center justify-center gap-4">
-        <span>Cadastrar-se no micro-servico de push notification:</span>
+        <span>Efetue o Login no micro-servico de push notification:</span>
         <div className="flex flex-col items-center justify-center">
-          <label htmlFor="name">Nome do Aplicativo:</label>
+          <label htmlFor="name">Usuario:</label>
           <input
             id="name"
             className="border-sky-100 border-2"
@@ -63,16 +67,16 @@ export default function Home() {
         <div className="flex gap-2 justify-center items-center">
           <button
             className="bg-blue-950 rounded-sm py-2 px-4 cursor-pointer"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/")}
           >
-            Ir para tela de login
+            Voltar para o Registro
           </button>
           <span>ou</span>
           <button
             className="bg-blue-950 rounded-sm py-2 px-4 cursor-pointer"
-            onClick={() => register()}
+            onClick={() => login()}
           >
-            Cadastrar
+            Login
           </button>
         </div>
         <span>{status}</span>

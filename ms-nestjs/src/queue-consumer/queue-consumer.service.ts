@@ -12,6 +12,7 @@ export class QueueConsumerService implements OnModuleInit {
   private handleQueueMsg(event) {
     console.log('*************************');
     console.log('handler queue msg ', event);
+    console.log('*************************');
   }
 
   async onModuleInit() {

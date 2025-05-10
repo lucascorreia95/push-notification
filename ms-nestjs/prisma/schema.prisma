@@ -14,10 +14,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum NotificationsType {
+  Success
+  Error
+  Warning
+  Information
+  Confirmation
+  Progress
+  Alert
+  Request
+}
+
 model Users {
-  id String @id @default(uuid())
-  name String @unique
-  password String
+  id        String @id @default(uuid())
+  name      String @unique
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Notification Notification[]
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  message   String
+  type      NotificationsType @default(Information)
+  userId    String
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

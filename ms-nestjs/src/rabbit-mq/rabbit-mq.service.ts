@@ -28,6 +28,7 @@ export class RabbitMqService implements OnModuleInit {
           this.configService.get<string>('RABBITMQ_URL') ||
             'amqp://guest:guest@localhost:5672',
         ],
+        queue: this.configService.get<string>('QUEUE_NAME'),
       },
     });
   }
@@ -48,8 +49,8 @@ export class RabbitMqService implements OnModuleInit {
     }
   }
 
-  async publish(queue: string, message: any): Promise<void> {
-    this.client.emit(queue, message);
+  async publish(queue: string, payload: any): Promise<void> {
+    this.client.emit(queue, payload);
   }
 
   consume(queue: string, callback: (message: any) => void) {

@@ -28,7 +28,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="grid grid-rows-[20px_1fr_20px] items-start justify-items-center min-h-screen p-3 gap-16 font-[family-name:var(--font-geist-sans)]">
-          <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
+          <main className="flex flex-col gap-4 row-start-2 items-center justify-center">
+            <h1 className="text-4xl text-center">
+              Exemplo de aplicação produtora de mensagens
+            </h1>
             {children}
           </main>
         </div>

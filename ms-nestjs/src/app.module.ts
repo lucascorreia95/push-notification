@@ -8,6 +8,8 @@ import { QueueConsumerModule } from './queue-consumer/queue-consumer.module';
 import { RabbitMqModule } from './rabbit-mq/rabbit-mq.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthModule } from './auth/auth.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { QueueProducerModule } from './queue-producer/queue-producer.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AuthModule } from './auth/auth.module';
     RabbitMqModule,
     EventEmitterModule.forRoot(),
     UsersModule,
+    NotificationsModule,
+    QueueProducerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
